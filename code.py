@@ -89,7 +89,7 @@ def algoritmo_guloso(atividades: list[Atividade]) -> tuple[list[Atividade], floa
             duracao_total += atividade_atual.duracao()
             ultima_selecionada = atividade_atual
 
-        return selecionadas, duracao_total
+    return selecionadas, duracao_total
     
 #
 # PROGRAMAÇÃO DINÂMICA 
