@@ -34,9 +34,22 @@ Abaixo estão exemplos reais do processamento do sistema para o **Teste 2 - Méd
 * `[A1] Reunião de Alinhamento (08h00-09h30)`
 * `[A4] Workshop de Python (11h30-13h30)`
 * `[A9] Palestra sobre IA (13h30-15h00)`
+* `[A10] Feedback Individual (15h30-16h30)`
 * `[A11] Planejamento Estratégico (16h00-18h00)`
 * `[A12] Workshop de Design (09h30-11h30)`
 
-**Saída - Programação Dinâmica (Foco em Participantes):**
-Nesta execução, o algoritmo encontrou a grade otimizada para acomodar 130 pessoas em 5 eventos sem choques de horário:
-1. `-> [A1] Reunião de Alinhamento      08h00-
+**Saída 1 - Algoritmo Guloso (Foco em mais atividades):**
+Nesta execução, o algoritmo encontrou a seguinte grade priorizando o término mais cedo:
+1. `-> [A1] Reunião de Alinhamento      08h00-09h30  prio=3  part=10`
+2. `-> [A12] Workshop de Design         09h30-11h30  prio=3  part=22`
+3. `-> [A4] Workshop de Python          11h30-13h30  prio=4  part=30`
+4. `-> [A9] Palestra sobre IA           13h30-15h00  prio=5  part=60`
+5. `-> [A10] Feedback Individual        15h30-16h30  prio=1  part=2`
+
+**Saída 2 - Programação Dinâmica (Foco em Participantes):**
+Nesta execução, o algoritmo também selecionou 5 atividades, mas trocou a última opção para maximizar o número de participantes (totalizando 130 pessoas):
+1. `-> [A1] Reunião de Alinhamento      08h00-09h30  prio=3  part=10`
+2. `-> [A12] Workshop de Design         09h30-11h30  prio=3  part=22`
+3. `-> [A4] Workshop de Python          11h30-13h30  prio=4  part=30`
+4. `-> [A9] Palestra sobre IA           13h30-15h00  prio=5  part=60`
+5. `-> [A11] Planejamento Estratégico   16h00-18h00  prio=5  part=8`
