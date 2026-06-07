@@ -1,6 +1,5 @@
 import time
 
-
 class Atividade:
     def __init__(self, codigo: str, nome: str, inicio: float, fim: float, prioridade: int, participantes: int):
         self.codigo = codigo
@@ -10,17 +9,17 @@ class Atividade:
         self.prioridade = prioridade
         self.participantes = participantes
 
-        def duracao(self) -> float:
-            return self.fim - self.inicio
-        
-        def conflita_com(self, outra: "Atividade") -> bool:
-            return self.inicio < outra.fim and outra.inicio < self.fim
-        
-        def __str__(self):
-            h_ini = f"{int(self.inicio):02d}h{int((self.inicio % 1) * 60):02d}"
-            h_fim = f"{int(self.fim):02d}h{int((self.fim % 1) * 60):02d}"
-            return (f"[{self.codigo}] {self.nome:<30s} "
-                    f"{h_ini}-{h_fim}  prio={self.prioridade}  part={self.participantes}")
+    def duracao(self) -> float:
+        return self.fim - self.inicio
+    
+    def conflita_com(self, outra: "Atividade") -> bool:
+        return self.inicio < outra.fim and outra.inicio < self.fim
+    
+    def __str__(self):
+        h_ini = f"{int(self.inicio):02d}h{int((self.inicio % 1) * 60):02d}"
+        h_fim = f"{int(self.fim):02d}h{int((self.fim % 1) * 60):02d}"
+        return (f"[{self.codigo}] {self.nome:<30s} "
+                f"{h_ini}-{h_fim}  prio={self.prioridade}  part={self.participantes}")
         
 
 #
@@ -174,10 +173,141 @@ def programacao_dinamica(atividades: list[Atividade], metrica: str = "participan
             lc = _ultimo_compativel(atividades_ordenadas, i - 1)
             i = lc + 1 if lc >= 0 else 0
 
-        # Invertemos a lista porque o rastreamento foi feito de trás para frente
-        selecionadas.reverse()
+    # Invertemos a lista porque o rastreamento foi feito de trás para frente
+    selecionadas.reverse()
 
-        beneficio_total = dp[n]
-        tempo_execucao_ms = (time.perf_counter() - t0) * 1000
+    beneficio_total = dp[n]
+    tempo_execucao_ms = (time.perf_counter() - t0) * 1000
 
-        return selecionadas, beneficio_total, tempo_execucao_ms
+    return selecionadas, beneficio_total, tempo_execucao_ms
+
+# ==========================================
+# GERAÇÃO DE TESTES E MÓDULOS DO SISTEMA
+# ==========================================
+
+def gerar_testes():
+    """Gera os 3 conjuntos de testes obrigatórios do projeto."""
+    
+    # Teste 1 - Pequeno (5 a 8 atividades)
+    teste1 = [
+        Atividade("A1", "Reunião de Alinhamento", 8.0, 9.5, 3, 10),
+        Atividade("A2", "Treinamento de Vendas", 9.0, 11.0, 2, 25),
+        Atividade("A3", "Palestra de Inovação", 10.0, 12.0, 5, 50),
+        Atividade("A4", "Workshop de Python", 11.5, 13.5, 4, 30),
+        Atividade("A5", "Apresentação de Resultados", 13.0, 14.5, 5, 15),
+        Atividade("A6", "Dinâmica de Grupo", 14.0, 16.0, 2, 20),
+    ]
+
+    # Teste 2 - Médio (10 a 20 atividades)
+    teste2 = teste1 + [
+        Atividade("A7", "Reunião de Marketing", 8.5, 10.5, 4, 12),
+        Atividade("A8", "Treinamento de Liderança", 10.5, 12.5, 3, 18),
+        Atividade("A9", "Palestra sobre IA", 13.5, 15.0, 5, 60),
+        Atividade("A10", "Feedback Individual", 15.5, 16.5, 1, 2),
+        Atividade("A11", "Planejamento Estratégico", 16.0, 18.0, 5, 8),
+        Atividade("A12", "Workshop de Design", 9.5, 11.5, 3, 22),
+    ]
+
+    # Teste 3 - Maior (Mais de 30 atividades) - Gerado dinamicamente para facilitar
+    import random
+    teste3 = []
+    for i in range(1, 35):
+        inicio = round(random.uniform(8.0, 16.0), 1)
+        duracao = round(random.uniform(1.0, 3.0), 1)
+        teste3.append(Atividade(
+            f"B{i}", 
+            f"Atividade Extra {i}", 
+            inicio, 
+            inicio + duracao, 
+            random.randint(1, 5), 
+            random.randint(5, 100)
+        ))
+
+    return teste1, teste2, teste3
+
+
+def buscar_atividade(atividades: list[Atividade], termo: str):
+    """Realiza a busca de atividades por código ou nome."""
+    resultados = [a for a in atividades if termo.lower() in a.codigo.lower() or termo.lower() in a.nome.lower()]
+    if resultados:
+        print(f"\n--- Resultados da Busca para '{termo}' ---")
+        for a in resultados:
+            print(a)
+    else:
+        print("\nNenhuma atividade encontrada.")
+
+
+def comparar_solucoes(atividades: list[Atividade], nome_teste: str):
+    """
+    Executa ambos os algoritmos e compara o desempenho e os resultados obtidos.
+    """
+    print(f"\n{'='*50}")
+    print(f" COMPARAÇÃO DE DESEMPENHO: {nome_teste.upper()} ({len(atividades)} atividades)")
+    print(f"{'='*50}")
+
+    # --- Execução Gulosa ---
+    t0_guloso = time.perf_counter()
+    sel_guloso, dur_guloso = algoritmo_guloso(atividades)
+    tempo_guloso_ms = (time.perf_counter() - t0_guloso) * 1000
+    
+    # --- Execução Programação Dinâmica ---
+    sel_dp, ben_dp, tempo_dp_ms = programacao_dinamica(atividades, metrica="participantes")
+
+    print("\n[ ALGORITMO GULOSO (Foco em mais atividades) ]")
+    print(f"Atividades Selecionadas : {len(sel_guloso)}")
+    print(f"Tempo de Execução       : {tempo_guloso_ms:.4f} ms")
+    print("Grade de Horários:")
+    for a in sel_guloso: print(f"  -> {a}")
+
+    print("\n[ PROGRAMAÇÃO DINÂMICA (Foco em Participantes) ]")
+    print(f"Atividades Selecionadas : {len(sel_dp)}")
+    print(f"Participantes Atingidos : {ben_dp}")
+    print(f"Tempo de Execução       : {tempo_dp_ms:.4f} ms")
+    print("Grade de Horários:")
+    for a in sel_dp: print(f"  -> {a}")
+
+
+def menu_principal():
+    """Interface principal para demonstração do sistema."""
+    t1, t2, t3 = gerar_testes()
+    
+    while True:
+        print("\n" + "="*40)
+        print(" SISTEMA DE AGENDAMENTO DE ATIVIDADES")
+        print("="*40)
+        print("1. Organizar e visualizar atividades (Merge Sort)")
+        print("2. Buscar atividade específica")
+        print("3. Executar e comparar Teste 1 (Pequeno)")
+        print("4. Executar e comparar Teste 2 (Médio)")
+        print("5. Executar e comparar Teste 3 (Maior)")
+        print("0. Sair")
+        
+        opcao = input("Escolha uma opção: ")
+
+        if opcao == "1":
+            print("\nAtividades do Teste 2 ordenadas por Início:")
+            ordenadas = merge_sort(t2, chave="inicio")
+            for a in ordenadas: print(a)
+            
+        elif opcao == "2":
+            termo = input("Digite o código ou nome da atividade: ")
+            buscar_atividade(t2, termo) # Usando o dataset médio como base de busca
+            
+        elif opcao == "3":
+            comparar_solucoes(t1, "Teste 1 - Pequeno")
+            
+        elif opcao == "4":
+            comparar_solucoes(t2, "Teste 2 - Médio")
+            
+        elif opcao == "5":
+            comparar_solucoes(t3, "Teste 3 - Maior")
+            
+        elif opcao == "0":
+            print("Encerrando o sistema...")
+            break
+        else:
+            print("Opção inválida.")
+
+
+if __name__ == "__main__":
+    menu_principal()
