@@ -16,16 +16,18 @@ Os algoritmos foram testados em três cenários com volumes diferentes de dados:
 | Cenário | Métrica | Algoritmo Guloso | Programação Dinâmica |
 | :--- | :--- | :--- | :--- |
 | **Teste 1 - Pequeno (6 ativ.)** | Atividades Selecionadas | 3 | 3 |
-| | Benefício (Participantes) | N/A | 80 |
+| | Benefício (Participantes) | 75 | 80 |
 | | Tempo de Execução | 0.0440 ms | 0.0503 ms |
 | **Teste 2 - Médio (12 ativ.)** | Atividades Selecionadas | 5 | 5 |
-| | Benefício (Participantes) | N/A | 130 |
+| | Benefício (Participantes) | 124 | 130 |
 | | Tempo de Execução | 0.0608 ms | 0.0380 ms |
-| **Teste 3 - Maior (34 ativ.)** | Atividades Selecionadas | 4 | 4 |
-| | Benefício (Participantes) | N/A | 274 |
+| **Teste 3 - Maior (34 ativ.)*** | Atividades Selecionadas | 4 | 4 |
+| | Benefício (Participantes) | 311 | 432 |
 | | Tempo de Execução | 0.0837 ms | 0.1108 ms |
 
-**Análise:** Ambos os algoritmos conseguiram agendar um número similar de eventos na maioria dos cenários (como visto no Teste 3, onde ambos selecionaram 4 atividades). A Programação Dinâmica apresentou um tempo de execução que pode ser ligeiramente superior ao Guloso (ex: 0.1108 ms vs 0.0837 ms no Teste 3), o que é esperado devido à etapa adicional de construção da tabela de memoização. Em contrapartida, a Programação Dinâmica provou-se altamente eficaz na sua proposta de maximizar o peso, conseguindo encontrar uma combinação de horários diferente que totalizou 274 participantes no cenário de estresse, cumprindo o objetivo de otimizar o benefício.
+*\* Nota metodológica: O Teste 3 é gerado dinamicamente utilizando fatores aleatórios para simular cenários de estresse. Devido a essa natureza estocástica, os números exatos de participantes e tempo de execução variarão a cada execução do sistema, embora a proporção de vantagem e o comportamento assintótico dos algoritmos se mantenham consistentes.*
+
+**Análise:** Ambos os algoritmos conseguiram agendar um número similar de eventos na maioria dos cenários. A Programação Dinâmica apresentou um tempo de execução ligeiramente superior ao Guloso nos cenários maiores, o que é esperado devido à etapa adicional de construção da tabela de memoização e buscas binárias. Em contrapartida, a Programação Dinâmica provou-se altamente eficaz na sua proposta de maximizar o peso. No Teste 2, o Guloso atingiu 124 pessoas, enquanto a Programação Dinâmica ajustou a grade para atingir 130. No cenário de estresse simulado (Teste 3), essa diferença se tornou expressiva: enquanto a estratégia gulosa aglomerou 311 participantes, a otimização global alcançou 432, cumprindo o objetivo central de maximizar o benefício corporativo em agendas complexas.
 
 ## 4. Exemplos de Entradas e Saídas
 Abaixo estão exemplos reais do processamento do sistema para o **Teste 2 - Médio**.

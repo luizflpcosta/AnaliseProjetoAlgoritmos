@@ -249,12 +249,15 @@ def comparar_solucoes(atividades: list[Atividade], nome_teste: str):
     t0_guloso = time.perf_counter()
     sel_guloso, dur_guloso = algoritmo_guloso(atividades)
     tempo_guloso_ms = (time.perf_counter() - t0_guloso) * 1000
-    
+    part_guloso = sum(a.participantes for a in sel_guloso)
+
     # --- Execução Programação Dinâmica ---
     sel_dp, ben_dp, tempo_dp_ms = programacao_dinamica(atividades, metrica="participantes")
+    dur_dp = sum(a.duracao() for a in sel_dp)
 
     print("\n[ ALGORITMO GULOSO (Foco em mais atividades) ]")
     print(f"Atividades Selecionadas : {len(sel_guloso)}")
+    print(f"Participantes Atingidos : {part_guloso}")
     print(f"Tempo de Execução       : {tempo_guloso_ms:.4f} ms")
     print("Grade de Horários:")
     for a in sel_guloso: print(f"  -> {a}")
